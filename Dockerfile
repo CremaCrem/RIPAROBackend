@@ -16,6 +16,7 @@ RUN apk update && apk add --no-cache \
     libjpeg-turbo-dev \
     oniguruma-dev \
     icu-dev \
+    postgresql-dev \
     git \
     curl
 
@@ -24,7 +25,7 @@ RUN apk update && apk add --no-cache \
 # - zip, opcache: common
 # - gd: for image handling (jpeg/png)
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype=no \
- && docker-php-ext-install pdo pdo_mysql zip opcache mbstring bcmath gd
+ && docker-php-ext-install pdo pdo_pgsql zip opcache mbstring bcmath gd
 
 # Copy vendor from builder
 WORKDIR /var/www/html
@@ -38,9 +39,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
  && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Nginx config and startup script
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx.main.conf /etc/nginx/nginx.conf
+COPY docker/laravel.conf /etc/nginx/conf.d/laravel.conf
 COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh && sed -i 's/\r$//' /usr/local/bin/start.sh
 
 EXPOSE 80
 CMD ["/usr/local/bin/start.sh"]
