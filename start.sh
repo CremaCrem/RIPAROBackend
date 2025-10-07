@@ -12,4 +12,4 @@ php artisan storage:link || true
 
 echo "Starting PHP-FPM and Nginx..."
 php-fpm &
-exec nginx -g "daemon off
+exec nginx -g "daemon off;"
