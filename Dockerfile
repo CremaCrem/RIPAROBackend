@@ -2,7 +2,7 @@
 FROM composer:2.6.5 as vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
 # 2) Runtime: PHP-FPM + Nginx
 FROM php:8.2-fpm-alpine AS production
