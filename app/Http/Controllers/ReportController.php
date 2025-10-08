@@ -10,6 +10,27 @@ use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
+    public function publicResolved(Request $request)
+    {
+        $query = Report::query()->where('progress', 'resolved');
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->query('type'));
+        }
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->query('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->query('date_to'));
+        }
+
+        $perPage = (int) $request->query('per_page', 12);
+        $perPage = max(1, min(100, $perPage));
+
+        $reports = $query->orderByDesc('updated_at')->paginate($perPage);
+        return response()->json($reports);
+    }
+
 	public function store(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
