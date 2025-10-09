@@ -1,0 +1,8 @@
+/vendor
+/node_modules
+/storage/*.key
+.env
+.git
+.gitignore
+Homestead.yaml
+Homestead.json
