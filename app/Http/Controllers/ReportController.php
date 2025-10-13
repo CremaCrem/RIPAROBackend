@@ -57,7 +57,7 @@ class ReportController extends Controller
 		if ($request->hasFile('photos')) {
 			foreach ($request->file('photos') as $file) {
 				$path = $file->store('reports', 'public');
-				$storedPhotos[] = url(Storage::url($path)); // e.g., http://localhost:8000/storage/...
+				$storedPhotos[] = Storage::url($path); // e.g., /storage/reports/...
 			}
 		}
 
@@ -183,7 +183,7 @@ class ReportController extends Controller
 		if ($request->hasFile('photos')) {
 			foreach ($request->file('photos') as $file) {
 				$path = $file->store('reports/resolutions', 'public');
-				$stored[] = url(Storage::url($path));
+				$stored[] = Storage::url($path);
 			}
 		}
 
