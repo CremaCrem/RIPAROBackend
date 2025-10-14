@@ -12,7 +12,6 @@ class FeedbackController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'subject' => 'nullable|string|max:150',
-            'anonymous' => 'boolean',
             'contact_email' => 'nullable|email|max:255',
             'message' => 'required|string',
         ]);
@@ -29,8 +28,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::create([
             'user_id' => $user->id,
             'subject' => $request->input('subject'),
-            'anonymous' => (bool) $request->input('anonymous', false),
-            'contact_email' => $request->boolean('anonymous') ? null : $request->input('contact_email'),
+            'contact_email' => $request->input('contact_email'),
             'message' => $request->input('message'),
         ]);
 
