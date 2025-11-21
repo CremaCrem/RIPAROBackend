@@ -27,6 +27,7 @@ class User extends Authenticatable
         'mobile_number',
         'barangay',
         'zone',
+        'role',
         'verification_status',
         'id_document_path',
     ];

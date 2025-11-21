@@ -12,7 +12,9 @@ class ReportController extends Controller
 {
     public function publicResolved(Request $request)
     {
-        $query = Report::query()->where('progress', 'resolved');
+	        $query = Report::query()
+				->with(['resolver:id,first_name,last_name,role'])
+				->where('progress', 'resolved');
 
         if ($request->filled('type')) {
             $query->where('type', $request->query('type'));
@@ -91,7 +93,7 @@ class ReportController extends Controller
 			return response()->json(['message' => 'Forbidden'], 403);
 		}
 
-		$query = Report::query();
+		$query = Report::query()->with(['resolver:id,first_name,last_name,role']);
 
 		if ($request->filled('status')) {
 			$query->where('progress', $request->query('status'));
@@ -115,7 +117,8 @@ class ReportController extends Controller
 
 	public function mine(Request $request)
 	{
-		$reports = Report::where('user_id', $request->user()->id)
+		$reports = Report::with(['resolver:id,first_name,last_name,role'])
+			->where('user_id', $request->user()->id)
 			->orderByDesc('created_at')
 			->get();
 		return response()->json(['reports' => $reports]);
@@ -128,6 +131,7 @@ class ReportController extends Controller
 		if ($report->user_id !== $user->id && !in_array($role, ['admin', 'mayor'])) {
 			return response()->json(['message' => 'Forbidden'], 403);
 		}
+		$report->loadMissing('resolver:id,first_name,last_name,role');
 		return response()->json(['report' => $report]);
 	}
 

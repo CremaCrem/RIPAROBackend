@@ -38,4 +38,12 @@ class Report extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+
+	/**
+	 * The staff / mayor user who resolved this report.
+	 */
+	public function resolver()
+	{
+		return $this->belongsTo(User::class, 'resolved_by');
+	}
 }
