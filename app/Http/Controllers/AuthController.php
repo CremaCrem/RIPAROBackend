@@ -96,6 +96,18 @@ class AuthController extends Controller
             ], 403);
         }
 
+        // Check if account is deactivated
+        if (!$user->is_active) {
+            return response()->json([
+                'message' => 'Your account has been deactivated. Please contact customer support for assistance.',
+                'status' => 'deactivated'
+            ], 403);
+        }
+
+        // Update last_active_at on login
+        $user->last_active_at = now();
+        $user->save();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

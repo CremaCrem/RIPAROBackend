@@ -30,6 +30,10 @@ class User extends Authenticatable
         'role',
         'verification_status',
         'id_document_path',
+        'last_active_at',
+        'is_active',
+        'deactivated_at',
+        'deactivated_by',
     ];
 
     /**
@@ -52,6 +56,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_active_at' => 'datetime',
+            'is_active' => 'boolean',
+            'deactivated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * The user who deactivated this account.
+     */
+    public function deactivator()
+    {
+        return $this->belongsTo(User::class, 'deactivated_by');
     }
 }

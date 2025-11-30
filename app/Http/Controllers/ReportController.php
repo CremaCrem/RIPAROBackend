@@ -40,7 +40,7 @@ class ReportController extends Controller
 			'age' => 'required|integer|min:0|max:120',
 			'gender' => 'required|string|max:20',
 			'address' => 'required|string',
-			'type' => 'required|in:infrastructure,sanitation,community_welfare,behavoural_concerns',
+			'type' => 'required|in:infrastructure,sanitation,community_welfare,behavioural_concerns',
 			'description' => 'required|string',
 			'photos' => 'sometimes|array',
 			'photos.*' => 'file|image|max:5120',
@@ -145,6 +145,8 @@ class ReportController extends Controller
 
 		$validator = Validator::make($request->all(), [
 			'progress' => 'required|in:pending,in_review,assigned,resolved,rejected',
+			'rejection_reason' => 'nullable|string|max:2000',
+			'resolution_message' => 'nullable|string|max:2000',
 		]);
 		if ($validator->fails()) {
 			return response()->json([
@@ -153,8 +155,23 @@ class ReportController extends Controller
 			], 422);
 		}
 
-		$report->progress = $request->input('progress');
+		$progress = $request->input('progress');
+		$report->progress = $progress;
+
+		// Handle rejection reason
+		if ($progress === 'rejected') {
+			$report->rejection_reason = $request->input('rejection_reason');
+		}
+
+		// Handle resolution message
+		if ($progress === 'resolved') {
+			$report->resolution_message = $request->input('resolution_message');
+			$report->resolved_by = $report->resolved_by ?: $user->id;
+			$report->resolved_at = $report->resolved_at ?: now();
+		}
+
 		$report->save();
+		$report->loadMissing('resolver:id,first_name,last_name,role');
 
 		return response()->json([
 			'message' => 'Report updated successfully',

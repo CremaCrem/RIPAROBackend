@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	// Users for staff
 	Route::get('/users', [UserVerificationController::class, 'index']);
 	Route::post('/users/{user}/verification', [UserVerificationController::class, 'updateStatus']);
+	Route::post('/users/{user}/toggle-active', [UserVerificationController::class, 'toggleActive']);
 
 	// User profile update requests (citizen)
 	Route::post('/profile/update-request', [UserUpdateRequestController::class, 'store']);

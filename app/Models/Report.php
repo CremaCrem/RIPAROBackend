@@ -24,6 +24,8 @@ class Report extends Model
 		'resolved_by',
 		'resolved_at',
 		'resolution_notes',
+		'rejection_reason',
+		'resolution_message',
 		'date_generated',
 	];
 

@@ -542,7 +542,7 @@ Citizens can request profile updates:
 -   **infrastructure**: Roads, bridges, buildings
 -   **sanitation**: Waste management, cleanliness
 -   **community_welfare**: Social services, health
--   **behavoural_concerns**: Public behavior issues
+-   **behavioural_concerns**: Public behavior issues
 
 ---
 

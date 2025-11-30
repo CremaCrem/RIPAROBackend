@@ -29,7 +29,7 @@ return new class extends Migration
                 'infrastructure',
                 'sanitation',
                 'community_welfare',
-                'behavoural_concerns',
+                'behavioural_concerns',
             ])->after('address');
             $table->json('photos')->nullable()->after('type');
             $table->text('description')->after('photos');
